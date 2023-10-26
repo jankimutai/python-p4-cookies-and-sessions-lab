@@ -37,7 +37,7 @@ def show_article(id):
         return response
 @app.route('/clear')
 def clear():
-    session.clear()
+    session.pop()
     return 'Session cleared'
 if __name__ == '__main__':
     app.run(port=5555)
