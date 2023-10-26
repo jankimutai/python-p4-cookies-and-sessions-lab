@@ -25,10 +25,19 @@ def index_articles():
 
     pass
 
-@app.route('/articles/<int:id>')
+@app.route('/articles/<int:id>',methods = ["GET"])
 def show_article(id):
-
-    pass
-
+    session['page_views'] = session.get('page_views',0) + 1
+    article = Article.query.filter_by(id=id).first().to_dict()
+    if session['page_views'] <= 3:
+        response = response = make_response(jsonify(article),200)
+        return response
+    else:
+        response = make_response(jsonify({'message': 'Maximum pageview limit reached'}),401)
+        return response
+@app.route('/clear')
+def clear():
+    session.clear()
+    return 'Session cleared'
 if __name__ == '__main__':
     app.run(port=5555)
